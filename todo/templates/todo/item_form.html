@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+<form action="" method="post">
+<div class="row mt-3 justify-content-center">
+    <div class="col-12 col-md-6"> 
+        {% csrf_token %}
+        {{form.as_p}}
+
+    </div>
+</div>
+<div class="row mt-3 justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="row">
+            <div class="col-6 text-left"> 
+                <a href="{% url 'todo:list' %}" class="btn btn-danger">Cancelar</a>
+            </div>
+            <div class="col-6 text-right"> 
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock container %}
+
+{% block extra_js %}
+    
+
+<script>
+    $(function() {
+        
+    
+        {% if object %}
+            $("#id_due_date").val('{{object.due_date|date:"Y-m-d"}}')
+        {% endif %}
+
+    });
+
+</script>
+
+{% endblock extra_js %}

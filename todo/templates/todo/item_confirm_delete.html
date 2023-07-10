@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block container %}
+
+<div class="row mt-3 justify-content-center">
+    <div class="col-12 col-md-8">
+
+		<div class="card">
+			<div class="card-header">
+				<h3>Apagar  "{{ object }}" ?</h3>
+			</div>
+			<div class="card-body">
+				<form class="form" method="post" action="">
+					{% csrf_token %}
+					<br>
+					<div class="row">
+						<div class="col-6 text-left">
+							<a class="btn btn-danger " href="{% url 'todo:list' %}">
+							Cancelar
+							</a>
+						</div>
+						<div class="col-6 text-right">
+							<button type="submit" value="" class="btn btn-primary" >
+							Apagar
+							</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+
+	
+		</div>
+  	</div>
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+  <script type="text/javascript">
+    $('.btn-primary').click(function(e){
+      e.preventDefault();
+      var r = confirm("Tem certeza?");
+      if (r == true) {
+        $('.form').submit();
+      }
+    });
+  </script>
+{% endblock %}
+

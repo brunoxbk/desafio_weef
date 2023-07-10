@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+<div class="row mt-3">
+    <div class="col text-right"> 
+        <a class="btn btn-primary" href="{% url 'todo:create' %}">Add</a>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col"> 
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Vencimento</th>
+                    <th scope="col text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in object_list %}
+                    <tr class="{% if object.is_due %}table-danger{% endif %}">
+                        <th scope="row">{{object.pk}}</th>
+                        <td>{% if object.checked %} <del> {{object.description}} </del> {% else %} {{object.description}}  {% endif %}</td>
+                        <td>{% if object.checked %} <span class="badge badge-success">Feito</span> {% else %} <span class="badge badge-warning">A fazer</span>  {% endif %}</td>
+                        <td>{{object.due_date|date:"d/m/Y"}}</td>
+                        <td class="text-center"><div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+                            <a href="{% url 'todo:update' object.pk %}" class="btn btn-secondary">Editar</a>
+                            <a href="{% url 'todo:check' object.pk  %}" class="btn btn-info">Concluir</a>
+                            <a href="{% url 'todo:delete' object.pk  %}" class="btn btn-danger">Apagar</a>
+                        </div></td>
+                    </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+
+    </div>
+</div>
+    
+{% endblock container %}
+
+{% block extra_js %}
+    
+
+<script>
+
+window.onload = function () {
+    bootlint.showLintReportForCurrentDocument([], {
+        hasProblems: false,
+        problemFree: false
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    function formatDate(date) {
+        return (
+            date.getDate() +
+            "/" +
+            (date.getMonth() + 1) +
+            "/" +
+            date.getFullYear()
+        );
+    }
+
+    var currentDate = formatDate(new Date());
+
+    $(".due-date-button").datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayHighlight: true,
+        startDate: currentDate,
+        orientation: "bottom right"
+    });
+
+    $(".due-date-button").on("click", function (event) {
+        $(".due-date-button")
+            .datepicker("show")
+            .on("changeDate", function (dateChangeEvent) {
+                $(".due-date-button").datepicker("hide");
+                $(".due-date-label").text(formatDate(dateChangeEvent.date));
+                $(".due-date-label").show();
+            });
+    });
+};
+
+</script>
+
+{% endblock extra_js %}

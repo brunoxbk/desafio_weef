@@ -1,0 +1,35 @@
+{%extends 'base.html'%}
+
+{% block container %}
+
+<div class="row justify-content-center mt-3">
+    <div class="col-md-4 col-12">
+
+        <h2 class="text-center">Entre na sua conta</h2>
+            <form method="post" action="">
+                {% csrf_token %}
+                
+
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for=" {{ field.auto_id }} "> {{ field.label_tag }} </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <small>{{ field.errors|striptags }}</small> 
+                        {% endif %}
+                    </div>
+
+                       
+                
+                {% endfor %}
+                
+                <input type="submit" value="Login" class="btn btn-primary full-width">
+                <hr>
+                <p class="text-center">Esqueceu a senha? <a href="{% url 'password_reset' %}">Recuperar</a></p>
+                <p class="text-center">Não tem uma conta? <a href="{% url 'sign_up' %}">Criar</a></p>
+            </form>
+        
+    </div>
+</div>
+
+{% endblock container %}
